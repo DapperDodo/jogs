@@ -1,11 +1,11 @@
-package plug
+package custom_handler
 
 import (
 	"fmt"
 
-	"quizmaster/main/jogs"
-
 	"github.com/gopherjs/jquery"
+
+	"github.com/DapperDodo/jogs"
 )
 
 var jQuery = jquery.NewJQuery

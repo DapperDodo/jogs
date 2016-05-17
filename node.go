@@ -81,7 +81,7 @@ func (n *ptr_struct) handle(node Node, cb Callback) {
 				field_value.Set(reflect.ValueOf(out))
 				cb(node.Object)
 			})
-			return
+			continue
 		}
 
 		switch e.Field(i).Type().Kind() {
