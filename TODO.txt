@@ -1,0 +1,10 @@
+
+V combine dom and node info structs and consolidate dispatcher and editor interfaces
+V pass plugin options as well
+- add nest level to node info
+- put leaf nodes in separate folder or project?
+- open source githubbification
+- can `nest` be a node handler?
+- map
+- float
+- bool
