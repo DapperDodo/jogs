@@ -21,7 +21,7 @@ generate editors (web forms) from go structs, specifically meant for developing 
 
 	type Data struct {
 		Id     int
-		GameId string `jogs:"custom"`
+		GameId string
 		Dialog []string
 	}
 
@@ -58,7 +58,8 @@ and navigate a browser to:
 
 Jogs can handle complex data structures, for example nesting and slices are fully supported. (TODO: maps, floats and bools)
 
-Also, Jogs sports a powerful plugin structure that makes overriding and extending easy.
+Also, Jogs sports a powerful plugin structure that makes overriding and extending easy. 
+Custom handlers can be registered, after which struct tags can be used to tell Jogs where to use these custom handlers.
 
 
 	// +build js
