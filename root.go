@@ -3,6 +3,8 @@ package jogs
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/gopherjs/jquery"
 )
 
 /*
@@ -12,6 +14,9 @@ import (
 	TODO: maybe this is superfluous. Could clients create the root node and call the dispatcher themselves?
 */
 func Root(d *Dispatcher, container string, obj interface{}, cb Callback) {
+
+	jquery.NewJQuery("#" + container).Empty()
+
 	node := Node{
 		Object:      obj,
 		ContainerId: container,

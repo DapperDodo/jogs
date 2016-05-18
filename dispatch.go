@@ -1,7 +1,7 @@
 package jogs
 
 import (
-	"fmt"
+//"fmt"
 )
 
 /*
@@ -21,10 +21,10 @@ func (d *Dispatcher) Register(handle string, plugin handler) {
 
 func (d *Dispatcher) dispatch(node Node, cb Callback) {
 
-	fmt.Println("dispatch handle and arguments :", node.Handle, node.Options)
+	// fmt.Println("dispatch handle and arguments :", node.Handle, node.Options)
 
 	if d.registry[node.Handle] == nil {
-		fmt.Println("Dispatcher has no handler registered for handle", node.Handle)
+		// fmt.Println("Dispatcher has no handler registered for handle", node.Handle)
 		return
 	}
 

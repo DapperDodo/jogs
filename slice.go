@@ -24,7 +24,7 @@ func (s *slice) handle(node Node, cb Callback) {
 	for i := 0; i < val.Len(); i++ {
 
 		valrow := val.Index(i)
-		fmt.Println("field", i, ":", valrow.Kind(), "->", valrow.Interface())
+		//fmt.Println("field", i, ":", valrow.Kind(), "->", valrow.Interface())
 
 		jQuery("#" + node.EditorId).Append("<div class=\"row\" id=\"" + node.EditorId + "-" + strconv.Itoa(i) + "-row\"></div>")
 		jQuery("#" + node.EditorId + "-" + strconv.Itoa(i) + "-row").Append("<div class=\"col-lg-1\" id=\"" + node.EditorId + "-" + strconv.Itoa(i) + "-col-L\"></div>")

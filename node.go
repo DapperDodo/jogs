@@ -58,7 +58,7 @@ func (n *ptr_struct) handle(node Node, cb Callback) {
 	for i := 0; i < e.NumField(); i++ {
 		field_value := e.Field(i)
 		field_name := e.Type().Field(i).Name
-		fmt.Println("struct field", i, field_name, ":", field_value.Kind(), "->", field_value.Interface())
+		//fmt.Println("struct field", i, field_name, ":", field_value.Kind(), "->", field_value.Interface())
 		if !field_value.CanSet() {
 			fmt.Println("field is not settable")
 			continue
@@ -68,7 +68,7 @@ func (n *ptr_struct) handle(node Node, cb Callback) {
 
 		tag := e.Type().Field(i).Tag.Get("jogs")
 		if tag != "" {
-			fmt.Println("tag detected: ", tag)
+			//fmt.Println("tag detected: ", tag)
 
 			fields := strings.Fields(tag)
 
