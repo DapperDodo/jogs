@@ -21,7 +21,6 @@ func Root(d *Dispatcher, container string, obj interface{}, cb Callback) {
 		Object:      obj,
 		ContainerId: container,
 		EditorId:    "root",
-		Label:       "",
 		Handle:      "ROOT",
 	}
 	d.dispatch(node, cb)

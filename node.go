@@ -15,6 +15,7 @@ type Node struct {
 	EditorId    string      // the id of the dom node of this editor
 	Label       string      // the name of this editor
 	Handle      string      // a key to the handler that will build this node's editor
+	Idx 		int 		// the index of the node in the struct field list or slice
 	Options     []string    // (optional) arguments for the handler
 }
 
@@ -65,6 +66,7 @@ func (n *ptr_struct) handle(node Node, cb Callback) {
 		}
 
 		node_row := node
+		node_row.Idx = i
 
 		tag := e.Type().Field(i).Tag.Get("jogs")
 		if tag != "" {

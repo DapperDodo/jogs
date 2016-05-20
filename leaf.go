@@ -49,17 +49,14 @@ type unsupported struct {
 }
 
 func newUnsupported() *unsupported {
-
-	skin_tpl := `
+	return &unsupported{template.Must(template.New("skin").Parse(string(`
 		{{define "handle"}}
 			<div class="form-group has-warning" id="{{.EditorId}}">
 				<label class="control-label" for="inputWarning">{{.Label}}</label>
 				<input class="form-control" id="inputWarning" type="text" placeholder="{{.Object}}" disabled></input>
 			</div>
 		{{end}}
-	`
-	skin := template.Must(template.New("skin").Parse(string(skin_tpl)))
-	return &unsupported{skin}
+	`)))}
 }
 
 func (h *unsupported) handle(node Node, cb Callback) {
@@ -73,7 +70,7 @@ type intHandler struct {
 }
 
 func newIntHandler() *intHandler {
-	skin_tpl := `
+	return &intHandler{template.Must(template.New("skin").Parse(string(`
 		{{define "handle"}}
 			<div class="form-group" id="{{.EditorId}}">
 			{{if ne .Label ""}}
@@ -96,9 +93,13 @@ func newIntHandler() *intHandler {
 				</span>
 			</div>
 		{{end}}
-	`	
-	skin := template.Must(template.New("skin").Parse(string(skin_tpl)))
-	return &intHandler{skin}
+
+		{{define "form-error"}}
+			<div id="{{.EditorId}}-error" class="alert alert-danger">
+				Please fill in a number!
+			</div>
+		{{end}}
+	`)))}
 }
 
 func (h *intHandler) handle(node Node, cb Callback) {
@@ -127,13 +128,13 @@ func (h *intHandler) save(node Node, cb Callback) {
 	if err != nil {
 		jQuery("#" + node.EditorId).AddClass("has-error")
 		jQuery("#" + node.EditorId + "-edit-input").Focus().Select()
-		jQuery("#" + node.EditorId + "-help").Remove()
-		jQuery("#" + node.EditorId).Append("<p class=\"help-block\" id=\"" + node.EditorId + "-help\">Please fill in a number!</p>")
+		jQuery("#" + node.EditorId + "-error").Remove()
+		jQuery("#" + node.EditorId).Append(merge(h.skin, "form-error", node))
 		return
 	}
 	jQuery("#" + node.EditorId).RemoveClass("has-error")
 	jQuery("#" + node.EditorId + "-edit").Remove()
-	jQuery("#" + node.EditorId + "-help").Remove()
+	jQuery("#" + node.EditorId + "-error").Remove()
 
 	node.Object = int(val32)
 	h.show(node, cb)
@@ -148,7 +149,7 @@ type stringHandler struct {
 }
 
 func newStringHandler() *stringHandler {
-	skin_tpl := `
+	return &stringHandler{template.Must(template.New("skin").Parse(string(`
 		{{define "handle"}}
 			<div class="form-group" id="{{.EditorId}}">
 			{{if ne .Label ""}}
@@ -171,9 +172,7 @@ func newStringHandler() *stringHandler {
 				</span>
 			</div>
 		{{end}}
-	`	
-	skin := template.Must(template.New("skin").Parse(string(skin_tpl)))
-	return &stringHandler{skin}
+	`)))}
 }
 
 func (h *stringHandler) handle(node Node, cb Callback) {

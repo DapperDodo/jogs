@@ -14,7 +14,7 @@ func init() {
 	DefaultDispatcher.Register("LEAF", &leaf{DefaultDispatcher})
 	DefaultDispatcher.Register("PTR", &ptr{DefaultDispatcher})
 	DefaultDispatcher.Register("PTR_STRUCT", &ptr_struct{DefaultDispatcher})
-	DefaultDispatcher.Register("SLICE", &slice{DefaultDispatcher})
+	DefaultDispatcher.Register("SLICE", newSlice(DefaultDispatcher))
 	DefaultDispatcher.Register("UNSUPPORTED", newUnsupported())
 	DefaultDispatcher.Register("LEAF_INT", newIntHandler())
 	DefaultDispatcher.Register("LEAF_STRING", newStringHandler())

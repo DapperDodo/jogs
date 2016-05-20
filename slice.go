@@ -4,12 +4,43 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"html/template"
 
 	"github.com/gopherjs/jquery"
 )
 
 type slice struct {
 	*Dispatcher
+	skin *template.Template
+}
+
+func newSlice(d *Dispatcher) *slice {
+	return &slice{d, template.Must(template.New("skin").Parse(string(`
+		{{define "row"}}
+			<div class="row" id="{{.EditorId}}-row\">
+				<div class="col-lg-1" id="{{.EditorId}}-col-L">
+					<button type="button" id="{{.EditorId}}-del" class="btn btn-danger btn-md">
+						<i class="fa fa-trash"></i>
+					</button>
+				</div>				
+				<div class="col-lg-11" id="{{.ContainerId}}">
+				</div>
+			</div>
+		{{end}}
+
+		{{define "add"}}
+			<div class="row" id="{{.EditorId}}-add-row">
+				<div class="col-lg-1" id="{{.EditorId}}-add-col-L">
+					<button type="button" id="{{.EditorId}}-add" class="btn btn-success btn-md">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+				<div class="col-lg-11" id="{{.EditorId}}-add-col-R">
+					<hr />
+				</div>
+			</div>
+		{{end}}
+	`)))}	
 }
 
 func (s *slice) handle(node Node, cb Callback) {
@@ -24,17 +55,14 @@ func (s *slice) handle(node Node, cb Callback) {
 	for i := 0; i < val.Len(); i++ {
 
 		valrow := val.Index(i)
-		//fmt.Println("field", i, ":", valrow.Kind(), "->", valrow.Interface())
-
-		jQuery("#" + node.EditorId).Append("<div class=\"row\" id=\"" + node.EditorId + "-" + strconv.Itoa(i) + "-row\"></div>")
-		jQuery("#" + node.EditorId + "-" + strconv.Itoa(i) + "-row").Append("<div class=\"col-lg-1\" id=\"" + node.EditorId + "-" + strconv.Itoa(i) + "-col-L\"></div>")
-		jQuery("#" + node.EditorId + "-" + strconv.Itoa(i) + "-row").Append("<div class=\"col-lg-11\" id=\"" + node.EditorId + "-" + strconv.Itoa(i) + "-col-R\"></div>")
-		jQuery("#" + node.EditorId + "-" + strconv.Itoa(i) + "-col-L").Append("<button type=\"button\" id=\"" + node.EditorId + "-" + strconv.Itoa(i) + "-del\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash\"></i></button>")
 
 		noderow := node
+		noderow.Idx = i
 		noderow.EditorId += "-" + strconv.Itoa(i)
 		noderow.Label = ""
 		noderow.ContainerId = noderow.EditorId + "-col-R"
+
+		jQuery("#" + node.EditorId).Append(merge(s.skin, "row", noderow))
 
 		switch valrow.Kind() {
 		case reflect.String, reflect.Int:
@@ -82,11 +110,7 @@ func (s *slice) handle(node Node, cb Callback) {
 		})
 	}
 
-	jQuery("#" + node.EditorId).Append("<div class=\"row\" id=\"" + node.EditorId + "-add-row\"></div>")
-	jQuery("#" + node.EditorId + "-add-row").Append("<div class=\"col-lg-1\" id=\"" + node.EditorId + "-add-col-L\"></div>")
-	jQuery("#" + node.EditorId + "-add-row").Append("<div class=\"col-lg-11\" id=\"" + node.EditorId + "-add-col-R\"><hr /> </div>")
-	jQuery("#" + node.EditorId + "-add-col-L").Append("<button type=\"button\" id=\"" + node.EditorId + "-add\" class=\"btn btn-success btn-xs\"><i class=\"fa fa-plus\"></i></button>")
-
+	jQuery("#" + node.EditorId).Append(merge(s.skin, "add", node))
 	jQuery("#"+node.EditorId+"-add").On(jquery.CLICK, func() {
 		if e.Kind() == reflect.Ptr {
 			val = reflect.Append(val, reflect.New(e.Elem()))
