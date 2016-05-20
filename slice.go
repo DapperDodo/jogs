@@ -70,9 +70,7 @@ func (s *slice) handle(node Node, cb Callback) {
 
 			svless := reflect.Zero(typ)
 			for j := 0; j < val.Len(); j++ {
-				fmt.Println("j :", j)
 				if j == i_closed_over {
-					fmt.Println("index skipped :", j)
 					continue
 				}
 				svless = reflect.Append(svless, val.Index(j))
