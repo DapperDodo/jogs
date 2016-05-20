@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"html/template"
 )
 
 /*
@@ -122,11 +123,25 @@ func (n *ptr_struct) handle(node Node, cb Callback) {
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
+var nest_tpl = template.Must(template.New("skin").Parse(string(`
+	{{define "nest"}}
+		<div class="row" id="{{.EditorId}}-slice">
+			<div class="col-lg-1" id="{{.EditorId}}-margin">
+				<label class="control-label">{{.Label}}</label>
+			</div>
+			<div class="col-lg-11" id="{{.EditorId}}-content">
+			</div>
+		</div>
+	{{end}}
+`)))
+
 func (n *ptr_struct) nest(node Node, field_name string) Node {
 	child := node
 	child.EditorId += "-" + field_name
 	child.Label = field_name
-	jQuery("#" + child.ContainerId).Append("<div class=\"row\" id=\"" + child.EditorId + "-slice\"><div class=\"col-lg-1\" id=\"" + child.EditorId + "-margin\"><label class=\"control-label\">" + child.Label + "</label></div><div class=\"col-lg-11\" id=\"" + child.EditorId + "-content\"></div></div>")
+	jQuery("#" + child.ContainerId).Append(merge(nest_tpl, "nest", child))
 	child.ContainerId = child.EditorId
 	child.EditorId += "-content"
 	child.ContainerId += "-content"
