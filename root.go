@@ -34,7 +34,7 @@ type root struct {
 	*Dispatcher
 }
 
-func (n *root) handle(node Node, cb Callback) {
+func (n *root) Handle(node Node, cb Callback) {
 
 	typekind := reflect.TypeOf(node.Object).Kind()
 

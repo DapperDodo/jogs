@@ -2,11 +2,11 @@ package jogs
 
 var DefaultDispatcher *Dispatcher
 
-var defaultRoot handler
+var defaultRoot Handler
 
 func init() {
 
-	DefaultDispatcher = &Dispatcher{map[string]handler{}}
+	DefaultDispatcher = &Dispatcher{map[string]Handler{}}
 
 	defaultRoot = &root{DefaultDispatcher}
 

@@ -16,7 +16,7 @@ type leaf struct {
 	*Dispatcher
 }
 
-func (n *leaf) handle(node Node, cb Callback) {
+func (n *leaf) Handle(node Node, cb Callback) {
 
 	typekind := reflect.TypeOf(node.Object).Kind()
 
@@ -63,7 +63,7 @@ func newUnsupported() *unsupported {
 	`)))}
 }
 
-func (h *unsupported) handle(node Node, cb Callback) {
+func (h *unsupported) Handle(node Node, cb Callback) {
 	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
 }
 
@@ -106,7 +106,7 @@ func newIntHandler() *intHandler {
 	`)))}
 }
 
-func (h *intHandler) handle(node Node, cb Callback) {
+func (h *intHandler) Handle(node Node, cb Callback) {
 	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
 	h.show(node, cb)
 }
@@ -185,7 +185,7 @@ func newFloatHandler() *floatHandler {
 	`)))}
 }
 
-func (h *floatHandler) handle(node Node, cb Callback) {
+func (h *floatHandler) Handle(node Node, cb Callback) {
 	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
 	h.show(node, cb)
 }
@@ -257,7 +257,7 @@ func newStringHandler() *stringHandler {
 	`)))}
 }
 
-func (h *stringHandler) handle(node Node, cb Callback) {
+func (h *stringHandler) Handle(node Node, cb Callback) {
 	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
 	h.show(node, cb)
 }
@@ -324,7 +324,7 @@ func newBoolHandler() *boolHandler {
 	`)))}
 }
 
-func (h *boolHandler) handle(node Node, cb Callback) {
+func (h *boolHandler) Handle(node Node, cb Callback) {
 	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
 	h.show(node, cb)
 }

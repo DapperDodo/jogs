@@ -2,9 +2,9 @@ package jogs
 
 import (
 	"fmt"
+	"html/template"
 	"reflect"
 	"strings"
-	"html/template"
 )
 
 /*
@@ -16,7 +16,7 @@ type Node struct {
 	EditorId    string      // the id of the dom node of this editor
 	Label       string      // the name of this editor
 	Handle      string      // a key to the handler that will build this node's editor
-	Idx 		int 		// the index of the node in the struct field list or slice
+	Idx         int         // the index of the node in the struct field list or slice
 	Options     []string    // (optional) arguments for the handler
 }
 
@@ -31,7 +31,7 @@ type ptr struct {
 	*Dispatcher
 }
 
-func (n *ptr) handle(node Node, cb Callback) {
+func (n *ptr) Handle(node Node, cb Callback) {
 
 	valueofkind := reflect.ValueOf(node.Object).Elem().Kind()
 
@@ -53,7 +53,7 @@ type ptr_struct struct {
 	*Dispatcher
 }
 
-func (n *ptr_struct) handle(node Node, cb Callback) {
+func (n *ptr_struct) Handle(node Node, cb Callback) {
 
 	e := reflect.ValueOf(node.Object).Elem()
 

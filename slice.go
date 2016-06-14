@@ -2,9 +2,9 @@ package jogs
 
 import (
 	"fmt"
+	"html/template"
 	"reflect"
 	"strconv"
-	"html/template"
 
 	"github.com/gopherjs/jquery"
 )
@@ -40,10 +40,10 @@ func newSlice(d *Dispatcher) *slice {
 				</div>
 			</div>
 		{{end}}
-	`)))}	
+	`)))}
 }
 
-func (s *slice) handle(node Node, cb Callback) {
+func (s *slice) Handle(node Node, cb Callback) {
 
 	typ := reflect.TypeOf(node.Object)
 	val := reflect.ValueOf(node.Object)
@@ -105,7 +105,7 @@ func (s *slice) handle(node Node, cb Callback) {
 			}
 
 			node.Object = svless.Interface()
-			s.handle(node, cb)
+			s.Handle(node, cb)
 			cb(svless.Interface())
 		})
 	}
@@ -119,7 +119,7 @@ func (s *slice) handle(node Node, cb Callback) {
 		}
 
 		node.Object = val.Interface()
-		s.handle(node, cb)
+		s.Handle(node, cb)
 		cb(val.Interface())
 	})
 }
