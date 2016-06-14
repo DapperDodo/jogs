@@ -10,8 +10,6 @@ import (
 	"github.com/gopherjs/jquery"
 )
 
-var jQuery = jquery.NewJQuery
-
 type leaf struct {
 	*Dispatcher
 }
@@ -37,7 +35,7 @@ func (n *leaf) Handle(node Node, cb Callback) {
 	n.dispatch(node, cb)
 }
 
-func merge(skin *template.Template, tpl string, data interface{}) string {
+func Merge(skin *template.Template, tpl string, data interface{}) string {
 	var buf bytes.Buffer
 	err := skin.ExecuteTemplate(&buf, tpl, data)
 	if err != nil {
@@ -64,7 +62,7 @@ func newUnsupported() *unsupported {
 }
 
 func (h *unsupported) Handle(node Node, cb Callback) {
-	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
+	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,12 +82,12 @@ func newIntHandler() *intHandler {
 		{{end}}
 
 		{{define "show"}}
-			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="{{.Object}}">
+			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="int..." value="{{.Object}}">
 		{{end}}
 
 		{{define "form"}}
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
-				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" value="{{.Object}}">
+				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="int..." value="{{.Object}}">
 				<span class="input-group-btn">
 					<button class="btn btn-default">
 						<i class="fa fa-save"></i>
@@ -107,38 +105,38 @@ func newIntHandler() *intHandler {
 }
 
 func (h *intHandler) Handle(node Node, cb Callback) {
-	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
+	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
 	h.show(node, cb)
 }
 
 func (h *intHandler) show(node Node, cb Callback) {
-	jQuery("#" + node.EditorId).Append(merge(h.skin, "show", node))
-	jQuery("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
+	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
 		h.form(node, cb)
 	})
 }
 
 func (h *intHandler) form(node Node, cb Callback) {
-	jQuery("#" + node.EditorId + "-show").Remove()
-	jQuery("#" + node.EditorId).Append(merge(h.skin, "form", node))
-	jQuery("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
+	J("#" + node.EditorId + "-show").Remove()
+	J("#" + node.EditorId).Append(Merge(h.skin, "form", node))
+	J("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
 		h.save(node, cb)
 	})
 }
 
 func (h *intHandler) save(node Node, cb Callback) {
 
-	val32, err := strconv.ParseInt(jQuery("#"+node.EditorId+"-edit-input").Val(), 10, 32)
+	val32, err := strconv.ParseInt(J("#"+node.EditorId+"-edit-input").Val(), 10, 32)
 	if err != nil {
-		jQuery("#" + node.EditorId).AddClass("has-error")
-		jQuery("#" + node.EditorId + "-edit-input").Focus().Select()
-		jQuery("#" + node.EditorId + "-error").Remove()
-		jQuery("#" + node.EditorId).Append(merge(h.skin, "form-error", node))
+		J("#" + node.EditorId).AddClass("has-error")
+		J("#" + node.EditorId + "-edit-input").Focus().Select()
+		J("#" + node.EditorId + "-error").Remove()
+		J("#" + node.EditorId).Append(Merge(h.skin, "form-error", node))
 		return
 	}
-	jQuery("#" + node.EditorId).RemoveClass("has-error")
-	jQuery("#" + node.EditorId + "-edit").Remove()
-	jQuery("#" + node.EditorId + "-error").Remove()
+	J("#" + node.EditorId).RemoveClass("has-error")
+	J("#" + node.EditorId + "-edit").Remove()
+	J("#" + node.EditorId + "-error").Remove()
 
 	node.Object = int(val32)
 	h.show(node, cb)
@@ -163,12 +161,12 @@ func newFloatHandler() *floatHandler {
 		{{end}}
 
 		{{define "show"}}
-			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="{{.Object}}">
+			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="float..." value="{{.Object}}">
 		{{end}}
 
 		{{define "form"}}
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
-				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" value="{{.Object}}">
+				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="float..." value="{{.Object}}">
 				<span class="input-group-btn">
 					<button class="btn btn-default">
 						<i class="fa fa-save"></i>
@@ -186,38 +184,38 @@ func newFloatHandler() *floatHandler {
 }
 
 func (h *floatHandler) Handle(node Node, cb Callback) {
-	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
+	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
 	h.show(node, cb)
 }
 
 func (h *floatHandler) show(node Node, cb Callback) {
-	jQuery("#" + node.EditorId).Append(merge(h.skin, "show", node))
-	jQuery("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
+	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
 		h.form(node, cb)
 	})
 }
 
 func (h *floatHandler) form(node Node, cb Callback) {
-	jQuery("#" + node.EditorId + "-show").Remove()
-	jQuery("#" + node.EditorId).Append(merge(h.skin, "form", node))
-	jQuery("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
+	J("#" + node.EditorId + "-show").Remove()
+	J("#" + node.EditorId).Append(Merge(h.skin, "form", node))
+	J("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
 		h.save(node, cb)
 	})
 }
 
 func (h *floatHandler) save(node Node, cb Callback) {
 
-	valf64, err := strconv.ParseFloat(jQuery("#"+node.EditorId+"-edit-input").Val(), 64)
+	valf64, err := strconv.ParseFloat(J("#"+node.EditorId+"-edit-input").Val(), 64)
 	if err != nil {
-		jQuery("#" + node.EditorId).AddClass("has-error")
-		jQuery("#" + node.EditorId + "-edit-input").Focus().Select()
-		jQuery("#" + node.EditorId + "-error").Remove()
-		jQuery("#" + node.EditorId).Append(merge(h.skin, "form-error", node))
+		J("#" + node.EditorId).AddClass("has-error")
+		J("#" + node.EditorId + "-edit-input").Focus().Select()
+		J("#" + node.EditorId + "-error").Remove()
+		J("#" + node.EditorId).Append(Merge(h.skin, "form-error", node))
 		return
 	}
-	jQuery("#" + node.EditorId).RemoveClass("has-error")
-	jQuery("#" + node.EditorId + "-edit").Remove()
-	jQuery("#" + node.EditorId + "-error").Remove()
+	J("#" + node.EditorId).RemoveClass("has-error")
+	J("#" + node.EditorId + "-edit").Remove()
+	J("#" + node.EditorId + "-error").Remove()
 
 	node.Object = valf64
 	h.show(node, cb)
@@ -241,12 +239,12 @@ func newStringHandler() *stringHandler {
 		{{end}}
 
 		{{define "show"}}
-			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="{{.Object}}">
+			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="string..." value="{{.Object}}">
 		{{end}}
 
 		{{define "form"}}
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
-				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" value="{{.Object}}">
+				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="string..." value="{{.Object}}">
 				<span class="input-group-btn">
 					<button class="btn btn-default">
 						<i class="fa fa-save"></i>
@@ -258,28 +256,28 @@ func newStringHandler() *stringHandler {
 }
 
 func (h *stringHandler) Handle(node Node, cb Callback) {
-	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
+	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
 	h.show(node, cb)
 }
 
 func (h *stringHandler) show(node Node, cb Callback) {
-	jQuery("#" + node.EditorId).Append(merge(h.skin, "show", node))
-	jQuery("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
+	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
 		h.form(node, cb)
 	})
 }
 
 func (h *stringHandler) form(node Node, cb Callback) {
-	jQuery("#" + node.EditorId + "-show").Remove()
-	jQuery("#" + node.EditorId).Append(merge(h.skin, "form", node))
-	jQuery("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
+	J("#" + node.EditorId + "-show").Remove()
+	J("#" + node.EditorId).Append(Merge(h.skin, "form", node))
+	J("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
 		h.save(node, cb)
 	})
 }
 
 func (h *stringHandler) save(node Node, cb Callback) {
-	str := jQuery("#" + node.EditorId + "-edit-input").Val()
-	jQuery("#" + node.EditorId + "-edit").Remove()
+	str := J("#" + node.EditorId + "-edit-input").Val()
+	J("#" + node.EditorId + "-edit").Remove()
 	node.Object = str
 	h.show(node, cb)
 	cb(str)
@@ -302,12 +300,12 @@ func newBoolHandler() *boolHandler {
 		{{end}}
 
 		{{define "show"}}
-			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="{{.Object}}">
+			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="boolean..." value="{{.Object}}">
 		{{end}}
 
 		{{define "form"}}
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
-				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" value="{{.Object}}">
+				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="boolean..." value="{{.Object}}">
 				<span class="input-group-btn">
 					<button class="btn btn-default">
 						<i class="fa fa-save"></i>
@@ -325,37 +323,37 @@ func newBoolHandler() *boolHandler {
 }
 
 func (h *boolHandler) Handle(node Node, cb Callback) {
-	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
+	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
 	h.show(node, cb)
 }
 
 func (h *boolHandler) show(node Node, cb Callback) {
-	jQuery("#" + node.EditorId).Append(merge(h.skin, "show", node))
-	jQuery("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
+	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
 		h.form(node, cb)
 	})
 }
 
 func (h *boolHandler) form(node Node, cb Callback) {
-	jQuery("#" + node.EditorId + "-show").Remove()
-	jQuery("#" + node.EditorId).Append(merge(h.skin, "form", node))
-	jQuery("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
+	J("#" + node.EditorId + "-show").Remove()
+	J("#" + node.EditorId).Append(Merge(h.skin, "form", node))
+	J("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
 		h.save(node, cb)
 	})
 }
 
 func (h *boolHandler) save(node Node, cb Callback) {
-	boolval, err := strconv.ParseBool(jQuery("#" + node.EditorId + "-edit-input").Val())
+	boolval, err := strconv.ParseBool(J("#" + node.EditorId + "-edit-input").Val())
 	if err != nil {
-		jQuery("#" + node.EditorId).AddClass("has-error")
-		jQuery("#" + node.EditorId + "-edit-input").Focus().Select()
-		jQuery("#" + node.EditorId + "-error").Remove()
-		jQuery("#" + node.EditorId).Append(merge(h.skin, "form-error", node))
+		J("#" + node.EditorId).AddClass("has-error")
+		J("#" + node.EditorId + "-edit-input").Focus().Select()
+		J("#" + node.EditorId + "-error").Remove()
+		J("#" + node.EditorId).Append(Merge(h.skin, "form-error", node))
 		return
 	}
-	jQuery("#" + node.EditorId).RemoveClass("has-error")
-	jQuery("#" + node.EditorId + "-edit").Remove()
-	jQuery("#" + node.EditorId + "-error").Remove()
+	J("#" + node.EditorId).RemoveClass("has-error")
+	J("#" + node.EditorId + "-edit").Remove()
+	J("#" + node.EditorId + "-error").Remove()
 
 	node.Object = boolval
 	h.show(node, cb)

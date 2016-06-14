@@ -141,7 +141,7 @@ func (n *ptr_struct) nest(node Node, field_name string) Node {
 	child := node
 	child.EditorId += "-" + field_name
 	child.Label = field_name
-	jQuery("#" + child.ContainerId).Append(merge(nest_tpl, "nest", child))
+	J("#" + child.ContainerId).Append(Merge(nest_tpl, "nest", child))
 	child.ContainerId = child.EditorId
 	child.EditorId += "-content"
 	child.ContainerId += "-content"

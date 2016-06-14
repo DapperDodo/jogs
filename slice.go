@@ -48,7 +48,7 @@ func (s *slice) Handle(node Node, cb Callback) {
 	typ := reflect.TypeOf(node.Object)
 	val := reflect.ValueOf(node.Object)
 
-	jQuery("#" + node.EditorId).Empty()
+	J("#" + node.EditorId).Empty()
 
 	e := typ.Elem()
 
@@ -62,7 +62,7 @@ func (s *slice) Handle(node Node, cb Callback) {
 		noderow.Label = ""
 		noderow.ContainerId = noderow.EditorId + "-col-R"
 
-		jQuery("#" + node.EditorId).Append(merge(s.skin, "row", noderow))
+		J("#" + node.EditorId).Append(Merge(s.skin, "row", noderow))
 
 		switch valrow.Kind() {
 		case reflect.String, reflect.Int:
@@ -85,7 +85,7 @@ func (s *slice) Handle(node Node, cb Callback) {
 				cb(val.Interface())
 			})
 		default:
-			jQuery("#" + node.EditorId).Empty()
+			J("#" + node.EditorId).Empty()
 			noderow.Handle = "UNSUPPORTED"
 			noderow.Object = fmt.Sprint("unsupported slice type :", e.Kind(), "->", valrow.Interface())
 			node.Label = ""
@@ -94,7 +94,7 @@ func (s *slice) Handle(node Node, cb Callback) {
 		}
 
 		i_closed_over := i
-		jQuery("#"+node.EditorId+"-"+strconv.Itoa(i)+"-del").On(jquery.CLICK, func() {
+		J("#"+node.EditorId+"-"+strconv.Itoa(i)+"-del").On(jquery.CLICK, func() {
 
 			svless := reflect.Zero(typ)
 			for j := 0; j < val.Len(); j++ {
@@ -110,8 +110,8 @@ func (s *slice) Handle(node Node, cb Callback) {
 		})
 	}
 
-	jQuery("#" + node.EditorId).Append(merge(s.skin, "add", node))
-	jQuery("#"+node.EditorId+"-add").On(jquery.CLICK, func() {
+	J("#" + node.EditorId).Append(Merge(s.skin, "add", node))
+	J("#"+node.EditorId+"-add").On(jquery.CLICK, func() {
 		if e.Kind() == reflect.Ptr {
 			val = reflect.Append(val, reflect.New(e.Elem()))
 		} else {

@@ -1,5 +1,14 @@
 package jogs
 
+import (
+	"github.com/gopherjs/jquery"
+)
+
+/*
+	Convenience handle to jQuery
+*/
+var J = jquery.NewJQuery
+
 /*
 	Callback propagates changes to the value object
 */
