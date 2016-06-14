@@ -19,4 +19,5 @@ func init() {
 	DefaultDispatcher.Register("LEAF_INT", newIntHandler())
 	DefaultDispatcher.Register("LEAF_STRING", newStringHandler())
 	DefaultDispatcher.Register("LEAF_FLOAT", newFloatHandler())
+	DefaultDispatcher.Register("LEAF_BOOL", newBoolHandler())
 }

@@ -27,9 +27,11 @@ func (n *leaf) handle(node Node, cb Callback) {
 		node.Handle = "LEAF_FLOAT"
 	case reflect.String:
 		node.Handle = "LEAF_STRING"
+	case reflect.Bool:
+		node.Handle = "LEAF_BOOL"
 	default:
 		node.Handle = "UNSUPPORTED"
-		node.Object = fmt.Sprint("Unsupported leaf type (leaf must be one of int|string|float|bool):", typekind, "->", node.Object)
+		node.Object = fmt.Sprint("Unsupported leaf type (leaf must be one of int|float|string|bool):", typekind, "->", node.Object)
 	}
 
 	n.dispatch(node, cb)
@@ -281,4 +283,81 @@ func (h *stringHandler) save(node Node, cb Callback) {
 	node.Object = str
 	h.show(node, cb)
 	cb(str)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+type boolHandler struct {
+	skin *template.Template
+}
+
+func newBoolHandler() *boolHandler {
+	return &boolHandler{template.Must(template.New("skin").Parse(string(`
+		{{define "handle"}}
+			<div class="form-group" id="{{.EditorId}}">
+			{{if ne .Label ""}}
+				<label class="control-label">{{.Label}}</label>
+			{{end}}
+			</div>
+		{{end}}
+
+		{{define "show"}}
+			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="{{.Object}}">
+		{{end}}
+
+		{{define "form"}}
+			<div class="form-group input-group" id="{{.EditorId}}-edit">
+				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" value="{{.Object}}">
+				<span class="input-group-btn">
+					<button class="btn btn-default">
+						<i class="fa fa-save"></i>
+					</button>
+				</span>
+			</div>
+		{{end}}
+
+		{{define "form-error"}}
+			<div id="{{.EditorId}}-error" class="alert alert-danger">
+				Please fill in a boolean! i.e. "0", "1", "true", "True", "TRUE", "false", "False", "FALSE", "t", "f", "T", "F"
+			</div>
+		{{end}}		
+	`)))}
+}
+
+func (h *boolHandler) handle(node Node, cb Callback) {
+	jQuery("#" + node.ContainerId).Append(merge(h.skin, "handle", node))
+	h.show(node, cb)
+}
+
+func (h *boolHandler) show(node Node, cb Callback) {
+	jQuery("#" + node.EditorId).Append(merge(h.skin, "show", node))
+	jQuery("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+		h.form(node, cb)
+	})
+}
+
+func (h *boolHandler) form(node Node, cb Callback) {
+	jQuery("#" + node.EditorId + "-show").Remove()
+	jQuery("#" + node.EditorId).Append(merge(h.skin, "form", node))
+	jQuery("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
+		h.save(node, cb)
+	})
+}
+
+func (h *boolHandler) save(node Node, cb Callback) {
+	boolval, err := strconv.ParseBool(jQuery("#" + node.EditorId + "-edit-input").Val())
+	if err != nil {
+		jQuery("#" + node.EditorId).AddClass("has-error")
+		jQuery("#" + node.EditorId + "-edit-input").Focus().Select()
+		jQuery("#" + node.EditorId + "-error").Remove()
+		jQuery("#" + node.EditorId).Append(merge(h.skin, "form-error", node))
+		return
+	}
+	jQuery("#" + node.EditorId).RemoveClass("has-error")
+	jQuery("#" + node.EditorId + "-edit").Remove()
+	jQuery("#" + node.EditorId + "-error").Remove()
+
+	node.Object = boolval
+	h.show(node, cb)
+	cb(boolval)
 }
