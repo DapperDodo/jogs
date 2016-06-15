@@ -239,12 +239,12 @@ func newStringHandler() *stringHandler {
 		{{end}}
 
 		{{define "show"}}
-			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="string..." value="{{.Object}}">
+			<input class="form-control" id="{{.EditorId}}-show" type="text" placeholder="{{if ne .Placeholder ""}}{{.Placeholder}}{{else}}string...{{end}}" value="{{.Object}}">
 		{{end}}
 
 		{{define "form"}}
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
-				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="string..." value="{{.Object}}">
+				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="{{if ne .Placeholder ""}}{{.Placeholder}}{{else}}string...{{end}}" value="{{.Object}}">
 				<span class="input-group-btn">
 					<button class="btn btn-default">
 						<i class="fa fa-save"></i>

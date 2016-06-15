@@ -14,8 +14,9 @@ type Node struct {
 	Object      interface{} // the actual data object that we want to edit
 	ContainerId string      // the id of the dom node in which we want this editor placed, a.k.a. parent
 	EditorId    string      // the id of the dom node of this editor
-	Label       string      // the name of this editor
 	Handle      string      // a key to the handler that will build this node's editor
+	Label       string      // the name of this editor
+	Placeholder string      // text to display when the field is empty
 	Idx         int         // the index of the node in the struct field list or slice
 	Options     []string    // (optional) arguments for the handler
 }
@@ -53,6 +54,10 @@ type ptr_struct struct {
 	*Dispatcher
 }
 
+func (n *ptr_struct) field_sep(c rune) bool {
+	return c == ','
+}
+
 func (n *ptr_struct) Handle(node Node, cb Callback) {
 
 	e := reflect.ValueOf(node.Object).Elem()
@@ -69,16 +74,27 @@ func (n *ptr_struct) Handle(node Node, cb Callback) {
 		node_row := node
 		node_row.Idx = i
 
+		// case 1: custom node through tags
 		tag := e.Type().Field(i).Tag.Get("jogs")
 		if tag != "" {
 			//fmt.Println("tag detected: ", tag)
 
-			fields := strings.Fields(tag)
+			fields := strings.FieldsFunc(tag, n.field_sep)
 
 			node_row.EditorId += "-" + field_name
 			node_row.Label = field_name
-			node_row.Handle = fields[0]
-			node_row.Options = fields[1:]
+			if len(fields) > 0 && fields[0] != "" {
+				node_row.Handle = fields[0]
+			}
+			if len(fields) > 1 && fields[1] != "" {
+				node_row.Label = fields[1]
+			}
+			if len(fields) > 2 && fields[2] != "" {
+				node_row.Placeholder = fields[2]
+			}
+			if len(fields) > 3 {
+				node_row.Options = fields[3:]
+			}
 			node_row.Object = field_value.Interface()
 			n.dispatch(node_row, func(out interface{}) {
 				field_value.Set(reflect.ValueOf(out))
@@ -87,6 +103,7 @@ func (n *ptr_struct) Handle(node Node, cb Callback) {
 			continue
 		}
 
+		// case 2: standard nodes
 		switch e.Field(i).Type().Kind() {
 		case reflect.Struct:
 			node_nested := n.nest(node_row, field_name)
