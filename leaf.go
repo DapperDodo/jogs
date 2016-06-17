@@ -118,13 +118,13 @@ func newIntHandler() *intHandler {
 
 func (h *intHandler) Handle(node Node, cb Callback) {
 	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
-	h.show(node, cb)
+	go h.show(node, cb)
 }
 
 func (h *intHandler) show(node Node, cb Callback) {
 	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
 	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
-		h.form(node, cb)
+		go h.form(node, cb)
 	})
 }
 
@@ -132,7 +132,7 @@ func (h *intHandler) form(node Node, cb Callback) {
 	J("#" + node.EditorId + "-show").Remove()
 	J("#" + node.EditorId).Append(Merge(h.skin, "form", node))
 	J("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
-		h.save(node, cb)
+		go h.save(node, cb)
 	})
 }
 
@@ -151,7 +151,7 @@ func (h *intHandler) save(node Node, cb Callback) {
 	J("#" + node.EditorId + "-error").Remove()
 
 	node.Object = int(val32)
-	h.show(node, cb)
+	go h.show(node, cb)
 
 	cb(int(val32))
 }
@@ -197,13 +197,13 @@ func newFloatHandler() *floatHandler {
 
 func (h *floatHandler) Handle(node Node, cb Callback) {
 	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
-	h.show(node, cb)
+	go h.show(node, cb)
 }
 
 func (h *floatHandler) show(node Node, cb Callback) {
 	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
 	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
-		h.form(node, cb)
+		go h.form(node, cb)
 	})
 }
 
@@ -211,7 +211,7 @@ func (h *floatHandler) form(node Node, cb Callback) {
 	J("#" + node.EditorId + "-show").Remove()
 	J("#" + node.EditorId).Append(Merge(h.skin, "form", node))
 	J("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
-		h.save(node, cb)
+		go h.save(node, cb)
 	})
 }
 
@@ -230,7 +230,7 @@ func (h *floatHandler) save(node Node, cb Callback) {
 	J("#" + node.EditorId + "-error").Remove()
 
 	node.Object = valf64
-	h.show(node, cb)
+	go h.show(node, cb)
 	cb(valf64)
 }
 
@@ -269,13 +269,13 @@ func newStringHandler() *stringHandler {
 
 func (h *stringHandler) Handle(node Node, cb Callback) {
 	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
-	h.show(node, cb)
+	go h.show(node, cb)
 }
 
 func (h *stringHandler) show(node Node, cb Callback) {
 	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
 	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
-		h.form(node, cb)
+		go h.form(node, cb)
 	})
 }
 
@@ -283,7 +283,7 @@ func (h *stringHandler) form(node Node, cb Callback) {
 	J("#" + node.EditorId + "-show").Remove()
 	J("#" + node.EditorId).Append(Merge(h.skin, "form", node))
 	J("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
-		h.save(node, cb)
+		go h.save(node, cb)
 	})
 }
 
@@ -291,7 +291,7 @@ func (h *stringHandler) save(node Node, cb Callback) {
 	str := J("#" + node.EditorId + "-edit-input").Val()
 	J("#" + node.EditorId + "-edit").Remove()
 	node.Object = str
-	h.show(node, cb)
+	go h.show(node, cb)
 	cb(str)
 }
 
@@ -336,13 +336,13 @@ func newBoolHandler() *boolHandler {
 
 func (h *boolHandler) Handle(node Node, cb Callback) {
 	J("#" + node.ContainerId).Append(Merge(h.skin, "handle", node))
-	h.show(node, cb)
+	go h.show(node, cb)
 }
 
 func (h *boolHandler) show(node Node, cb Callback) {
 	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
 	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
-		h.form(node, cb)
+		go h.form(node, cb)
 	})
 }
 
@@ -350,7 +350,7 @@ func (h *boolHandler) form(node Node, cb Callback) {
 	J("#" + node.EditorId + "-show").Remove()
 	J("#" + node.EditorId).Append(Merge(h.skin, "form", node))
 	J("#"+node.EditorId+"-edit-input").Focus().Select().On(jquery.BLUR, func() {
-		h.save(node, cb)
+		go h.save(node, cb)
 	})
 }
 
@@ -368,6 +368,6 @@ func (h *boolHandler) save(node Node, cb Callback) {
 	J("#" + node.EditorId + "-error").Remove()
 
 	node.Object = boolval
-	h.show(node, cb)
+	go h.show(node, cb)
 	cb(boolval)
 }

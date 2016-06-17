@@ -1,7 +1,6 @@
 package jogs
 
 import (
-	"fmt"
 	"html/template"
 	"reflect"
 	"strconv"
@@ -86,7 +85,7 @@ func (s *slice) Handle(node Node, cb Callback) {
 		default:
 			J("#" + node.EditorId).Empty()
 			noderow.Handle = "UNSUPPORTED"
-			noderow.Object = fmt.Sprint("unsupported slice type :", e.Kind(), "->", valrow.Interface())
+			noderow.Object = "unsupported slice type"
 			s.dispatch(noderow, nil)
 			return
 		}

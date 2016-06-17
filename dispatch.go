@@ -1,9 +1,5 @@
 package jogs
 
-import (
-//"fmt"
-)
-
 /*
 	Dispatcher decouples handles from handlers. This makes jogs a very flexible and extensible tool.
 */
@@ -21,10 +17,7 @@ func (d *Dispatcher) Register(handle string, plugin Handler) {
 
 func (d *Dispatcher) dispatch(node Node, cb Callback) {
 
-	// fmt.Println("dispatch handle and arguments :", node.Handle, node.Options)
-
 	if d.registry[node.Handle] == nil {
-		// fmt.Println("Dispatcher has no Handler registered for handle", node.Handle)
 		return
 	}
 

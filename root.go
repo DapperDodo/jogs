@@ -1,7 +1,6 @@
 package jogs
 
 import (
-	"fmt"
 	"reflect"
 
 	"github.com/gopherjs/jquery"
@@ -43,7 +42,7 @@ func (n *root) Handle(node Node, cb Callback) {
 		node.Handle = "PTR"
 	default:
 		node.Handle = "UNSUPPORTED"
-		node.Object = fmt.Sprint("Unsupported root type (root must be PTR):", typekind, "->", node.Object)
+		node.Object = "Unsupported root type (root must be PTR)"
 	}
 
 	n.dispatch(node, cb)

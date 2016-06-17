@@ -1,7 +1,6 @@
 package jogs
 
 import (
-	"fmt"
 	"html/template"
 	"reflect"
 	"strings"
@@ -47,7 +46,7 @@ func (n *ptr) Handle(node Node, cb Callback) {
 		node.Handle = "PTR_STRUCT"
 	default:
 		node.Handle = "UNSUPPORTED"
-		node.Object = fmt.Sprint("Unsupported ptr to <T> (must be ptr to struct)  :", valueofkind, "->", node.Object)
+		node.Object = "Unsupported ptr to <T> (must be ptr to struct)"
 	}
 
 	n.dispatch(node, cb)
@@ -71,9 +70,8 @@ func (n *ptr_struct) Handle(node Node, cb Callback) {
 	for i := 0; i < e.NumField(); i++ {
 		field_value := e.Field(i)
 		field_name := e.Type().Field(i).Name
-		//fmt.Println("struct field", i, field_name, ":", field_value.Kind(), "->", field_value.Interface())
 		if !field_value.CanSet() {
-			fmt.Println("field is not settable")
+			// TODO: handle logging
 			continue
 		}
 
