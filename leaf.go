@@ -16,6 +16,18 @@ type leaf struct {
 
 func (n *leaf) Handle(node Node, cb Callback) {
 
+	if len(node.Tags) > OVERRIDE_LABEL && node.Tags[OVERRIDE_LABEL] != "" {
+		node.Label = node.Tags[OVERRIDE_LABEL]
+	}
+	if len(node.Tags) > OVERRIDE_PLACEHOLDER && node.Tags[OVERRIDE_PLACEHOLDER] != "" {
+		node.Placeholder = node.Tags[OVERRIDE_PLACEHOLDER]
+	}
+	if len(node.Tags) > OVERRIDE_HANDLER && node.Tags[OVERRIDE_HANDLER] != "" {
+		node.Handle = node.Tags[OVERRIDE_HANDLER]
+		n.dispatch(node, cb)
+		return
+	}
+
 	typekind := reflect.TypeOf(node.Object).Kind()
 
 	switch typekind {

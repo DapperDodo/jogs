@@ -59,13 +59,12 @@ func (s *slice) Handle(node Node, cb Callback) {
 		noderow := node
 		noderow.Idx = i
 		noderow.EditorId += "-" + strconv.Itoa(i)
-		noderow.Label = ""
 		noderow.ContainerId = noderow.EditorId + "-col-R"
 
 		J("#" + node.EditorId).Append(Merge(s.skin, "row", noderow))
 
 		switch valrow.Kind() {
-		case reflect.String, reflect.Int:
+		case reflect.String, reflect.Int, reflect.Float64, reflect.Bool:
 			noderow.Handle = "LEAF"
 			noderow.Object = valrow.Interface()
 			s.dispatch(noderow, func(out interface{}) {
@@ -88,7 +87,6 @@ func (s *slice) Handle(node Node, cb Callback) {
 			J("#" + node.EditorId).Empty()
 			noderow.Handle = "UNSUPPORTED"
 			noderow.Object = fmt.Sprint("unsupported slice type :", e.Kind(), "->", valrow.Interface())
-			node.Label = ""
 			s.dispatch(noderow, nil)
 			return
 		}
