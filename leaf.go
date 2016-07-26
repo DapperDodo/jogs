@@ -101,7 +101,7 @@ func newIntHandler() *intHandler {
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
 				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="int..." value="{{.Object}}">
 				<span class="input-group-btn">
-					<button class="btn btn-default">
+					<button class="btn btn-default" tabindex="-1">
 						<i class="fa fa-save"></i>
 					</button>
 				</span>
@@ -123,7 +123,7 @@ func (h *intHandler) Handle(node Node, cb Callback) {
 
 func (h *intHandler) show(node Node, cb Callback) {
 	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
-	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	J("#"+node.EditorId+"-show").On(jquery.FOCUS, func() {
 		go h.form(node, cb)
 	})
 }
@@ -150,10 +150,14 @@ func (h *intHandler) save(node Node, cb Callback) {
 	J("#" + node.EditorId + "-edit").Remove()
 	J("#" + node.EditorId + "-error").Remove()
 
-	node.Object = int(val32)
+	// Kind is Int, but Type may be custom, so an explicit conversion is needed
+	v_conv := reflect.ValueOf(val32).Convert(reflect.ValueOf(node.Object).Type())
+	node.Object = v_conv.Interface()
+
+	//node.Object = int(val32)
 	go h.show(node, cb)
 
-	cb(int(val32))
+	cb(node.Object)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +184,7 @@ func newFloatHandler() *floatHandler {
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
 				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="float..." value="{{.Object}}">
 				<span class="input-group-btn">
-					<button class="btn btn-default">
+					<button class="btn btn-default" tabindex="-1">
 						<i class="fa fa-save"></i>
 					</button>
 				</span>
@@ -202,7 +206,7 @@ func (h *floatHandler) Handle(node Node, cb Callback) {
 
 func (h *floatHandler) show(node Node, cb Callback) {
 	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
-	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	J("#"+node.EditorId+"-show").On(jquery.FOCUS, func() {
 		go h.form(node, cb)
 	})
 }
@@ -229,9 +233,12 @@ func (h *floatHandler) save(node Node, cb Callback) {
 	J("#" + node.EditorId + "-edit").Remove()
 	J("#" + node.EditorId + "-error").Remove()
 
-	node.Object = valf64
+	// Kind is Float, but Type may be custom, so an explicit conversion is needed
+	v_conv := reflect.ValueOf(valf64).Convert(reflect.ValueOf(node.Object).Type())
+	node.Object = v_conv.Interface()
+
 	go h.show(node, cb)
-	cb(valf64)
+	cb(node.Object)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,7 +265,7 @@ func newStringHandler() *stringHandler {
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
 				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="{{if ne .Placeholder ""}}{{.Placeholder}}{{else}}string...{{end}}" value="{{.Object}}">
 				<span class="input-group-btn">
-					<button class="btn btn-default">
+					<button class="btn btn-default" tabindex="-1">
 						<i class="fa fa-save"></i>
 					</button>
 				</span>
@@ -274,7 +281,7 @@ func (h *stringHandler) Handle(node Node, cb Callback) {
 
 func (h *stringHandler) show(node Node, cb Callback) {
 	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
-	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	J("#"+node.EditorId+"-show").On(jquery.FOCUS, func() {
 		go h.form(node, cb)
 	})
 }
@@ -290,9 +297,13 @@ func (h *stringHandler) form(node Node, cb Callback) {
 func (h *stringHandler) save(node Node, cb Callback) {
 	str := J("#" + node.EditorId + "-edit-input").Val()
 	J("#" + node.EditorId + "-edit").Remove()
-	node.Object = str
+
+	// Kind is String, but Type may be custom, so an explicit cast is needed
+	v_conv := reflect.ValueOf(str).Convert(reflect.ValueOf(node.Object).Type())
+	node.Object = v_conv.Interface()
+
 	go h.show(node, cb)
-	cb(str)
+	cb(node.Object)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +330,7 @@ func newBoolHandler() *boolHandler {
 			<div class="form-group input-group" id="{{.EditorId}}-edit">
 				<input class="form-control" id="{{.EditorId}}-edit-input" type="text" placeholder="boolean..." value="{{.Object}}">
 				<span class="input-group-btn">
-					<button class="btn btn-default">
+					<button class="btn btn-default" tabindex="-1">
 						<i class="fa fa-save"></i>
 					</button>
 				</span>
@@ -341,7 +352,7 @@ func (h *boolHandler) Handle(node Node, cb Callback) {
 
 func (h *boolHandler) show(node Node, cb Callback) {
 	J("#" + node.EditorId).Append(Merge(h.skin, "show", node))
-	J("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	J("#"+node.EditorId+"-show").On(jquery.FOCUS, func() {
 		go h.form(node, cb)
 	})
 }
@@ -367,7 +378,10 @@ func (h *boolHandler) save(node Node, cb Callback) {
 	J("#" + node.EditorId + "-edit").Remove()
 	J("#" + node.EditorId + "-error").Remove()
 
-	node.Object = boolval
+	// Kind is Bool, but Type may be custom, so an explicit conversion is needed
+	v_conv := reflect.ValueOf(boolval).Convert(reflect.ValueOf(node.Object).Type())
+	node.Object = v_conv.Interface()
+
 	go h.show(node, cb)
-	cb(boolval)
+	cb(node.Object)
 }

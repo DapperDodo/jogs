@@ -26,7 +26,7 @@ func HandleCustom(node jogs.Node, cb jogs.Callback) {
 
 func showString(node jogs.Node, cb jogs.Callback) {
 	jQuery("#" + node.EditorId).Append("<input class=\"form-control\" id=\"" + node.EditorId + "-show\" type=\"text\" placeholder=\"" + fmt.Sprint(node.Object) + "\">")
-	jQuery("#"+node.EditorId+"-show").On(jquery.CLICK, func() {
+	jQuery("#"+node.EditorId+"-show").On(jquery.FOCUS, func() {
 		editString(node, cb)
 	})
 }

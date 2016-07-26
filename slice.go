@@ -18,7 +18,7 @@ func newSlice(d *Dispatcher) *slice {
 		{{define "row"}}
 			<div class="row" id="{{.EditorId}}-row\">
 				<div class="col-lg-1" id="{{.EditorId}}-col-L">
-					<button type="button" id="{{.EditorId}}-del" class="btn btn-danger btn-md">
+					<button type="button" id="{{.EditorId}}-del" class="btn btn-danger btn-md" tabindex="-1">
 						<i class="fa fa-trash"></i>
 					</button>
 				</div>				
@@ -30,7 +30,7 @@ func newSlice(d *Dispatcher) *slice {
 		{{define "add"}}
 			<div class="row" id="{{.EditorId}}-add-row">
 				<div class="col-lg-1" id="{{.EditorId}}-add-col-L">
-					<button type="button" id="{{.EditorId}}-add" class="btn btn-success btn-md">
+					<button type="button" id="{{.EditorId}}-add" class="btn btn-success btn-md" tabindex="-1">
 						<i class="fa fa-plus"></i>
 					</button>
 				</div>
