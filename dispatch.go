@@ -18,6 +18,7 @@ func (d *Dispatcher) Register(handle string, plugin Handler) {
 func (d *Dispatcher) dispatch(node Node, cb Callback) {
 
 	if d.registry[node.Handle] == nil {
+		// TODO: log this
 		return
 	}
 

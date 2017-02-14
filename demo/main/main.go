@@ -15,6 +15,12 @@ type Data struct {
 	GameId string `jogs:"custom"`
 	Dialog []string
 	Nested Nested
+	Sa     string
+	Sb     string
+	Sc     string
+	Aa     []string
+	Bb     []string
+	Cc     []string
 }
 
 type Nested struct {
@@ -41,7 +47,6 @@ func main() {
 	jogs.Root(jogs.DefaultDispatcher, "panel-content", data, func(data_out interface{}) {
 		showData(data)
 	})
-
 }
 
 func showData(data interface{}) {

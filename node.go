@@ -1,6 +1,7 @@
 package jogs
 
 import (
+	"fmt"
 	"html/template"
 	"reflect"
 	"strings"
@@ -72,6 +73,7 @@ func (n *ptr_struct) Handle(node Node, cb Callback) {
 		field_name := e.Type().Field(i).Name
 		if !field_value.CanSet() {
 			// TODO: handle logging
+			fmt.Println("non settable field :", field_name)
 			continue
 		}
 

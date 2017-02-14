@@ -35,9 +35,10 @@ func newSlice(d *Dispatcher) *slice {
 					</button>
 				</div>
 				<div class="col-lg-11" id="{{.EditorId}}-add-col-R">
-					<hr />
+					&nbsp;
 				</div>
 			</div>
+			<hr />
 		{{end}}
 	`)))}
 }
