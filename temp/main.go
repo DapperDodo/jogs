@@ -12,7 +12,7 @@ import (
 
 func main() {
 
-	data := &api.Aardvark{}
+	data := &api.User{}
 
 	// show the empty object that we will edit
 	showData(data)
@@ -28,6 +28,6 @@ func main() {
 
 // showData is a helper function that will display the data in json format
 func showData(data interface{}) {
-	d, _ := json.MarshalIndent(data, "<br/>", "&nbsp;&nbsp;&nbsp;&nbsp;")
+	d, _ := json.MarshalIndent(data, "<br/>", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
 	jquery.NewJQuery("#panel-title").SetHtml(string(d))
 }

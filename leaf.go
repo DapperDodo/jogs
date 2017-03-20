@@ -249,6 +249,7 @@ type stringHandler struct {
 
 func newStringHandler() *stringHandler {
 	return &stringHandler{template.Must(template.New("skin").Parse(string(`
+		
 		{{define "handle"}}
 			<div class="form-group" id="{{.EditorId}}">
 			{{if ne .Label ""}}
@@ -271,6 +272,7 @@ func newStringHandler() *stringHandler {
 				</span>
 			</div>
 		{{end}}
+
 	`)))}
 }
 

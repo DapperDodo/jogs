@@ -18,14 +18,26 @@ type Node struct {
 	Label       string      // the name of this editor, also the form field name
 	Placeholder string      // text to display when the field is empty
 	Idx         int         // the index of the node in the struct field list or slice
-	Tags        []string    // (optional) arguments for the handler, filled by parsing a struct tag called 'jogs' with comma separated strings (see OVERRIDE_ constants)
+	Tags        []string    // (optional) arguments for the handler, filled by parsing a struct tag called 'jogs' with comma separated strings (see OVERRIDE_ and PARAM_constants)
 }
 
 const (
 	OVERRIDE_HANDLER     int = iota // tag field 0 is for custom handlers
 	OVERRIDE_LABEL                  // tag field 1 is for overriding the field label (name)
 	OVERRIDE_PLACEHOLDER            // tag field 2 is for overriding the placeholder (text to display when the field is empty)
+	PARAM_1                         // tag field 3 is for passing a configuration parameter to the handler
+	PARAM_2                         // tag field 4 is for passing a configuration parameter to the handler
+	PARAM_3                         // tag field 5 is for passing a configuration parameter to the handler
 )
+
+func (n *Node) GetTag(idx int) string {
+
+	if idx >= len(n.Tags) {
+		return ""
+	}
+
+	return n.Tags[idx]
+}
 
 //////////////////////////////////////////////////////////////////////////////////////
 // private parts
